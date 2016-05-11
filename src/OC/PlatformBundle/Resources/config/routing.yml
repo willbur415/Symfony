@@ -1,6 +1,0 @@
-
-# src/OC/PlatformBundle/Resources/config/routing.yml
-
-index:
-    path:     /index
-    defaults: { _controller: OCPlatformBundle:Advert:index }
