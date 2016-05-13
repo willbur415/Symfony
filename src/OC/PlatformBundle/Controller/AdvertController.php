@@ -12,8 +12,16 @@ class AdvertController extends Controller
 {
     public function indexAction()
     {
-        $content = $this->get('templating')->render('OCPlatformBundle:Advert:index.html.twig');
+        return $this->render('OCPlatformBundle:Advert:index.html.twig');
+    }
 
-        return new Response($content);
+    public function viewAction($id)
+    {
+        return new Response("Affichage de l'annonce avec l'id: ".$id);
+    }
+
+    public function viewSlugAction($slug, $year, $format)
+    {
+        return new Response("File name: ".$slug.".".$format." date :".$year);
     }
 }
