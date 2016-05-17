@@ -20,8 +20,8 @@ class AdvertController extends Controller
         return new Response("Affichage de l'annonce avec l'id: ".$id);
     }
 
-    public function viewSlugAction($slug, $year, $format)
+    public function viewSlugAction($slug, $year, $_format)
     {
-        return new Response("File name: ".$slug.".".$format." date :".$year);
+        return new Response("File name: ".$slug.".".$_format." date :".$year);
     }
 }
