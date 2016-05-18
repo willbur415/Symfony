@@ -4,15 +4,16 @@
 
 namespace OC\PlatformBundle\Controller;
 
-// N'oubliez pas ce use :
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 
 class AdvertController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('OCPlatformBundle:Advert:index.html.twig');
+        return $this->render('@OCPlatform/Advert/index.html.twig');
     }
 
     public function viewAction($id)
