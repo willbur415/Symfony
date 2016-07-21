@@ -32,3 +32,10 @@ oc_platform_delete:
         _controller: OCPlatformBundle:Advert:delete
     requirements:
         id: \d+
+
+oc_platform_menu:
+    path:   /menu/{id}
+    defaults:
+        _controller: OCPlatformBundle:Advert:menu
+    requirements:
+        id: \d+
