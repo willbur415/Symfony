@@ -4,6 +4,7 @@
 
 namespace OC\PlatformBundle\Controller;
 
+use OC\PlatformBundle\Entity\Advert;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -58,18 +59,26 @@ class AdvertController extends Controller
 
     public function addAction(Request $request)
     {
-        $antispam = $this->container->get('oc_platform.antispam');
+        $advert = new Advert();
+        $advert->setDate(new \DateTime());
+        $advert->setTitle("Recherche développeur Symfony.");
+        $advert->setAuthor("William");
+        $advert->setContent("Nous recherchons un développeur Symfony.");
 
-        $text = '...';
+        $em = $this->getDoctrine()->getManager();
 
-        if ($antispam->isSpam($text)) {
-            throw new \Exception('Votre message à été détecté comme spam.');
-        }
+        $em->persist($advert);
+
+        $em->flush();
+
         if ($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée');
-            
-            return $this->redirectToRoute('oc_platform_view', array('id', 5));
+
+            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
+
+        return $this->render('@OCPlatform/Advert/add.html.twig');
+
         return $this->render('@OCPlatform/Advert/add.html.twig');
     }
 
