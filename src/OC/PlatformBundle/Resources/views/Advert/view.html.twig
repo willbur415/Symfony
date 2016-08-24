@@ -11,10 +11,20 @@
     <h2>{{ advert.title }}</h2>
     <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
 
+    {% if advert.image is not null %}
+        <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
+    {% endif %}
     <div class="well">
         {{ advert.content }}
     </div>
 
+    <h2>Applications</h2>
+    {% for application in listApplications %}
+        <h3>{{ application.author }}</h3>
+        <div>
+            {{ application.content }}
+        </div>
+    {% endfor %}
     <p>
         <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
             <i class="glyphicon glyphicon-chevron-left"></i>
