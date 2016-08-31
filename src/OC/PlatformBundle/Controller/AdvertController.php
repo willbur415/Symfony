@@ -6,6 +6,7 @@ namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Entity\Category;
 use OC\PlatformBundle\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,18 +113,46 @@ class AdvertController extends Controller
 
     public function editAction($id, Request $request)
     {
-            $advert = array(
-                'title' => 'Recherche développeur Symfony',
-                'id' => $id,
-                'author' => 'Alexandre',
-                'content' => 'Nous recherchons un développeur Symfony débutant sur Québec.',
-                'date' => new \DateTime()
-            );
-        return $this->render('@OCPlatform/Advert/edit.html.twig', array('advert' => $advert));
+        $em = $this->getDoctrine()->getManager();
+
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce d'id ".$id."n'existe pas");
+        }
+
+        $listCategory = $em->getRepository('OCPlatformBundle:Category')->findAll();
+
+        foreach ($listCategory as $category) {
+            $advert->addCategory($category);
+        }
+
+        $em->flush();
+
+        if ($request->isMethod('POST')) {
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée');
+
+            return $this->redirectToRoute('oc_platform_view', array('id' => 5));
+        }
+        return $this->render('OCPlatformBundle:Advert:edit.html.twig', array('advert' => $advert));
     }
     
     public function deleteAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce que vous essayez de supprimer avec l'id ".$id." n'existe pas.");
+        }
+
+        foreach ($advert->getCategories() as $category) {
+            $advert->removeCategory($category);
+        }
+
+        $em->flush();
+
         return $this->render('OCPlatformBundle:Advert:delete.html.twig');
     }
     
