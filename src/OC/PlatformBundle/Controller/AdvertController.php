@@ -5,6 +5,7 @@
 namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\Category;
 use OC\PlatformBundle\Entity\Image;
@@ -59,14 +60,20 @@ class AdvertController extends Controller
         $listApplication = $em->getRepository('OCPlatformBundle:Application')
             ->findBy(array('advert' => $advert));
 
+        $listAdvertSkill = $em
+            ->getRepository('OCPlatformBundle:AdvertSkill')
+            ->findBy(array('array' => $advert));
+
         return $this->render('@OCPlatform/Advert/view.html.twig', array(
             'advert' => $advert,
-            'listApplications' => $listApplication
+            'listApplications' => $listApplication,
+            'listAdvertSkill' => $listAdvertSkill
         ));
     }
 
     public function addAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         //Advert
         $advert = new Advert();
         $advert->setDate(new \DateTime());
@@ -74,6 +81,18 @@ class AdvertController extends Controller
         $advert->setAuthor("William");
         $advert->setContent("Nous recherchons un développeur Symfony.");
         $advert->setDate(new \DateTime());
+
+        $listSkills = $em->getRepository('OCPlatformBundle:Skill00')->findAll();
+
+        foreach ($listSkills as $skill) {
+            $advertSkill = new AdvertSkill();
+
+            $advertSkill->setAdvert($advert);
+            $advertSkill->setSkill($skill);
+            $advertSkill->setLevel('Expert');
+
+            $em->persist($advertSkill);
+        }
 
         $image = new Image();
         $image->setUrl("test.png");
@@ -91,8 +110,6 @@ class AdvertController extends Controller
 
         $application1->setAdvert($advert);
         $application2->setAdvert($advert);
-        
-        $em = $this->getDoctrine()->getManager();
 
         $em->persist($advert);
         $em->persist($application1);
