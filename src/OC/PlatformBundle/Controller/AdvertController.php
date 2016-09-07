@@ -62,7 +62,7 @@ class AdvertController extends Controller
 
         $listAdvertSkill = $em
             ->getRepository('OCPlatformBundle:AdvertSkill')
-            ->findBy(array('array' => $advert));
+            ->findBy(array('advert' => $advert));
 
         return $this->render('@OCPlatform/Advert/view.html.twig', array(
             'advert' => $advert,
@@ -82,7 +82,7 @@ class AdvertController extends Controller
         $advert->setContent("Nous recherchons un développeur Symfony.");
         $advert->setDate(new \DateTime());
 
-        $listSkills = $em->getRepository('OCPlatformBundle:Skill00')->findAll();
+        $listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
 
         foreach ($listSkills as $skill) {
             $advertSkill = new AdvertSkill();

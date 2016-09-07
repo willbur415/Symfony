@@ -10,4 +10,11 @@ namespace OC\PlatformBundle\Repository;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function myFindAll()
+    {
+        return $this->createQueryBuilder('a')
+            ->getQuery()
+            ->getResult();
+    }
 }
